@@ -258,3 +258,8 @@
   
   .btn.btn-sort { margin-top: 12px; /* or padding-top */ }
   
+  /* Ensure download area doesn't overlap the fixed nav */
+.download-row {
+  text-align: center;
+  margin: 20px 0 96px; /* bottom space gives breathing room above nav */
+}

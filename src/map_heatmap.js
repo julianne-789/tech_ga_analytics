@@ -112,15 +112,9 @@ function parseCSV(text) {
     return hover;
   }
   
-  function isLikelyCsv(file) {
-    const t = (file.type || "").toLowerCase();
-    return /\.csv$/i.test(file.name) || t.includes("csv") || t.includes("text/plain") || t.includes("vnd.ms-excel");
-  }
-  
   async function readFileText(file) {
     const text = await file.text();
-    // Strip UTF-8 BOM if present
-    return text.charCodeAt(0) === 0xFEFF ? text.slice(1) : text;
+    return text.charCodeAt(0) === 0xFEFF ? text.slice(1) : text; // strip BOM if present
   }
   
   // ---------- Wiring ----------
@@ -128,53 +122,14 @@ function parseCSV(text) {
     const fileInput = document.getElementById("csvFile");
     const genBtn    = document.getElementById("generateBtn");
     const statusEl  = document.getElementById("status");
-    const heatmapEl = document.getElementById("heatmap");
-    const dropZone  = document.getElementById("dropZone");
-    const heatSec   = document.getElementById("heatmapSection"); // hidden by default in HTML
+    const heatSec   = document.getElementById("heatmapSection"); // hidden by default
   
-    // Prevent page navigation when dropping files anywhere on the document
-    document.addEventListener("dragover", (e) => e.preventDefault());
-    document.addEventListener("drop", (e) => {
-      if (!dropZone || !dropZone.contains(e.target)) e.preventDefault();
-    });
-  
-    // Enable button when a file is chosen via picker + re-hide heatmap section
+    // Enable button when a file is chosen and re-hide heat area until Generate
     fileInput?.addEventListener("change", () => {
       genBtn && (genBtn.disabled = !fileInput.files?.length);
       statusEl && (statusEl.textContent = fileInput.files?.length ? "File ready." : "");
       if (heatSec) heatSec.hidden = true;
     });
-  
-    // Drag & drop on the drop zone
-    if (dropZone) {
-      dropZone.addEventListener("dragover", (e) => {
-        e.preventDefault();
-        dropZone.classList.add("drag-over");
-      });
-      dropZone.addEventListener("dragleave", () => dropZone.classList.remove("drag-over"));
-      dropZone.addEventListener("drop", (e) => {
-        e.preventDefault();
-        dropZone.classList.remove("drag-over");
-        const file = e.dataTransfer?.files?.[0];
-        if (!file || !isLikelyCsv(file)) {
-          alert("Please drop a CSV file.");
-          return;
-        }
-        // Reflect dropped file into the input so the rest of the flow works
-        const dt = new DataTransfer();
-        dt.items.add(file);
-        if (fileInput) fileInput.files = dt.files;
-        if (genBtn) genBtn.disabled = false;
-        if (statusEl) statusEl.textContent = "File ready (dropped).";
-        if (heatSec) heatSec.hidden = true; // hide until Generate
-      });
-  
-      // Click / keyboard to open file picker
-      dropZone.addEventListener("click", () => fileInput?.click());
-      dropZone.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); fileInput?.click(); }
-      });
-    }
   
     async function generate() {
       try {
@@ -195,11 +150,11 @@ function parseCSV(text) {
         const { countries, percent, matches, xTotals, yCounts } = computeMatrix(rows);
         const hover = makeHover(countries, percent, matches, xTotals, yCounts);
   
-        // Match your Python orientation: transpose percent and hover
+        // Match Python orientation: transpose percent and hover
         const z = transpose2D(percent);
         const hoverT = transpose2D(hover);
   
-        const target = document.getElementById("heatmap");  // re-query defensively
+        const target = document.getElementById("heatmap");
         if (!target) {
           console.error("Missing #heatmap container");
           statusEl && (statusEl.textContent = "Error: heatmap container not found.");
@@ -207,7 +162,7 @@ function parseCSV(text) {
           return;
         }
   
-        // Reveal the heatmap section now that we’re ready to render
+        // Show the heatmap section now that we’re ready to render
         if (heatSec) heatSec.hidden = false;
   
         await Plotly.newPlot(target, [{
@@ -226,9 +181,7 @@ function parseCSV(text) {
           margin: { l: 120, r: 40, t: 60, b: 80 }
         }, { responsive: true });
   
-        // Optional: scroll into view
         heatSec?.scrollIntoView({ behavior: "smooth", block: "start" });
-  
         statusEl && (statusEl.textContent = "Ready.");
       } catch (err) {
         console.error(err);
