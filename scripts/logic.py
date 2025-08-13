@@ -106,31 +106,6 @@ for i, x in enumerate(countries):         # Country X (rows)
         row.append(text)
     hover_text.append(row)
 
-"""     # Make heatmap
-
-# Transpose hover text matrix
-hover_text = np.array(hover_text).T.tolist()
-
-# Make heatmap
-fig = go.Figure(data=go.Heatmap(
-    z=percent_matrix.T,
-    x=countries,
-    y=countries,
-    colorscale=[[0.0, 'blue'], [1.0, 'red']],
-    colorbar=dict(title='% Match'),
-    text=hover_text,
-    hoverinfo='text'
-))
-
-fig.update_layout(
-    title='Voting Alignment Heatmap',
-    xaxis_title="Country X",
-    yaxis_title="Country Y",
-    width=5000,
-    height=5000
-)
- """
-
 # --- Make heatmap with white diagonal ---
 
 # Base matrix (transpose matches your axes); hide diagonal in base layer
@@ -197,5 +172,3 @@ pio.write_html(
 )
 
 print(f"Wrote heatmap to {out_file}")
-
-# This is a test comment to force Git to detect changes
