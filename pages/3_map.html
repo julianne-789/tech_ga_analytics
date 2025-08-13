@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>3. Heatmap</title>
+  <link rel="stylesheet" href="../assets/styles.css" />
+  <link rel="stylesheet" href="../assets/styles.map.css" />
+</head>
+<body>
+  <main class="page-container">
+    <h1>3. Voting Alignment Heatmap</h1>
+    <p class="muted">
+      Upload your CSV from Step 2 and generate a heatmap of voting alignment.
+    </p>
+
+    <section class="card">
+      <h2>How to read the chart</h2>
+      <ul>
+        <li><strong>X-axis:</strong> The reference country.</li>
+        <li><strong>Y-axis:</strong> The counterpart country; among all the Y/N votes cast by the reference country, each cell shows the percent that the counterpart country voted the same way. </li>
+
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Upload CSV</h2>
+
+      <!-- Drag area -->
+      <label id="dropZone" class="dropZone" for="csvFile" aria-label="Choose CSV file" tabindex="0">
+        <span class="dropZone-instructions">
+          Drag & drop your CSV here, or click to choose.
+        </span>
+      </label>
+
+      <div class="field">
+        <input id="csvFile" type="file" accept=".csv,text/csv,application/vnd.ms-excel,text/plain" />
+      </div>
+
+      <div class="row wrap actions">
+        <button id="generateBtn" class="btn" type="button" disabled>Generate Heatmap</button>
+        <span id="status" class="muted" aria-live="polite"></span>
+      </div>
+    </section>
+
+    <section id="heatmapSection" class="card" hidden>
+      <h2>Heatmap</h2>
+      <!-- Plotly renders into this div -->
+      <div id="heatmap" class="viz" role="img" aria-label="Voting alignment heatmap"></div>
+    </section>
+  </main>
+
+  <div class="nav-fixed" aria-label="Page navigation">
+    <a class="btn-nav" href="../index.html">Back to Home</a>
+  </div>
+
+  <!-- Scripts last -->
+  <script src="https://cdn.plot.ly/plotly-2.30.0.min.js"></script>
+  <script type="module" src="../src/map_heatmap.js"></script>
+</body>
+</html>
