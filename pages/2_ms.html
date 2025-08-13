@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2. Member States</title>
+  <!-- Global styles then page-specific styles -->
+  <link rel="stylesheet" href="../assets/styles.css" />
+  <link rel="stylesheet" href="../assets/styles.ms.css" />
+</head>
+<body>
+  <main class="page-container">
+    <h1>2. Choose Member States</h1>
+    <p>
+      Add and remove member states to your list using search, region, or category.
+    </p>
+
+    <section class="card">
+      <h2>Your Selected Member States</h2>
+
+      <!-- Search input (type to find member states) -->
+      <div class="field" style="position: relative; max-width: 800px;">
+        <input
+          id="selectedSearch"
+          type="text"
+          placeholder="Type to search… e.g., USA, France, Japan"
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="none"
+          spellcheck="false"
+          inputmode="search"
+          data-gramm="false"
+          data-lt-active="false"
+        />
+        <!-- Dropdown with member state matches -->
+        <div id="searchResults" class="dropdown"></div>
+      </div>
+
+      <!-- Current selections (chips with tiny × to remove) -->
+      <div id="chips" class="chips" style="margin-top:.5rem;"></div>
+
+      <!-- Bulk action buttons -->
+      <div class="row wrap" style="gap:10px; margin-top:12px;">
+        <button id="selectAll" class="btn" type="button">Select All</button>
+        <button id="clearAll" class="btn" type="button">Clear All</button>
+      </div>
+      <button id="sortToggle" class="btn btn-sort" type="button" aria-pressed="false" data-mode="selection">
+        <span class="btn-fixed">Sort</span>: <span id="sortModeText">Selection Order</span>
+      </button>
+      
+      
+
+      <!-- Add by region or category (placed BELOW the bulk buttons) -->
+      <div style="margin-top:14px;">
+        <div class="muted" style="margin-bottom:6px;">Add by region or category</div>
+        <div class="field" style="position: relative; max-width: 600px;">
+          <input
+            id="regionInput"
+            type="text"
+            placeholder="Type or scroll to choose a region or category…"
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="none"
+            spellcheck="false"
+            inputmode="search"
+            data-gramm="false"
+            data-lt-active="false"
+          />
+          <!-- Dropdown with region/category matches -->
+          <div id="regionResults" class="dropdown"></div>
+          <div id="catAgLabel" class="muted" style="margin:10px 0 6px; display:none;">
+            Chosen categories / subcategories
+          </div>
+          <div id="catAgChips" class="chips"></div>          
+        </div>
+      </div>
+    </section>
+
+   <!-- Add the "Download My CSV" button -->
+   <div style="text-align: center; margin-top: 20px; z-index: 10; position: relative;">
+    <button id="downloadCsvBtn" class = "btn" type = "button" style="padding: 10px 20px; font-size: 16px; z-index: 10;">
+      Download My CSV
+    </button>
+  </div>
+  <!-- Floating nav (always visible) -->
+  <div class="nav-fixed" aria-label="Page navigation">
+    <a class="btn-nav" href="1_res.html">← Prev</a>
+    <a class="btn-nav" href="3_map.html">Next →</a>
+  </div>
+  </main>
+<!-- 2_ms.html (add before </body>) -->
+<script src="../src/ms_select.js" defer></script>
+<script>
+  function persist() {
+    if (typeof localStorage !== "undefined") {
+      localStorage.setItem("selectedMS", JSON.stringify(Array.from(SELECTED)));
+    } else {
+      console.warn("localStorage is not available.");
+    }
+  }
+</script>
+</body>
+</html>

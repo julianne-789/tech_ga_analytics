@@ -6,6 +6,7 @@
   <title>1. Choose Resolutions</title>
   <!-- Global styles then page-specific styles -->
   <link rel="stylesheet" href="../assets/styles.css" />
+  <link rel="stylesheet" href="../assets/styles.res.css" />
 </head>
 <body>
   <main class="page-container">
@@ -71,8 +72,21 @@
   </main>
   <!-- Floating nav (always visible) -->
   <div class="nav-fixed" aria-label="Page navigation">
-    <a class="btn-nav" href="index.html">← Prev</a>
+    <a class="btn-nav" href="../index.html">← Prev</a>
     <a class="btn-nav" href="2_ms.html">Next →</a>
   </div>
+
+
+  <!-- JS -->
+  <script src="../src/res_select.js" defer></script>
+  <script>
+    function persist() {
+      if (typeof localStorage !== "undefined") {
+        localStorage.setItem("selectedRes", JSON.stringify(Array.from(SELECTED)));
+      } else {
+        console.warn("localStorage is not available.");
+      }
+    }
+  </script>
 </body>
 </html>
