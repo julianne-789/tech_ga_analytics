@@ -46,20 +46,20 @@ body {
 
 /* Style the "Get Started" button */
 #get-started-btn {
-  display: inline-block;
-  margin-top: 2rem;
-  padding: 0.75rem 1.5rem;
-  background-color: #0047AB; /* UN Blue */
-  color: white;
-  text-decoration: none;
-  font-weight: bold;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
-}
-
-#get-started-btn:hover {
-  background-color: #003580; /* Darker UN Blue */
-}
+    display: inline-block;
+    margin-top: 2rem;
+    padding: 0.75rem 1.5rem; /* Adds padding */
+    background-color: #0047AB; /* UN Blue */
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  #get-started-btn:hover {
+    background-color: #003580; /* Darker UN Blue */
+  }
 
 /* Style for the floating navigation container */
 .nav-fixed {
