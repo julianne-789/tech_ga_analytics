@@ -30,6 +30,8 @@ body {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     max-width: 600px; /* Limit the width for better readability */
     width: 90%;
+    font-size: 1.25rem; /* Adjust size as needed */
+    line-height: 1.6; /* Optional: Improve readability */
 }
 
 /* Center align title and description */
@@ -90,4 +92,29 @@ body {
   
   .btn-nav:hover {
     background-color: #003580; /* Darker UN Blue */
+  }
+
+  /* Increase font size for the "Type to search" input */
+#selectedSearch {
+    font-size: 1rem; /* Adjust size as needed */
+    padding: 0.5rem; /* Optional: Add padding for better usability */
+  }
+  
+  /* Increase font size for the "Select All" and "Clear All" buttons */
+  #selectAll,
+  #clearAll {
+    font-size: 1rem; /* Adjust size as needed */
+    padding: 0.5rem 1rem; /* Optional: Add padding for better button size */
+  }
+  
+  /* Increase font size for the "Add by category" input */
+  #categoryInput {
+    font-size: 1rem; /* Adjust size as needed */
+    padding: 0.5rem; /* Optional: Add padding for better usability */
+  }
+  
+  /* Optional: Style the "Add by category" label */
+  .muted {
+    font-size: 0.9rem; /* Slightly smaller font for muted text */
+    color: #666; /* Optional: Muted gray color */
   }
