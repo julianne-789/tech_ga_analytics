@@ -259,7 +259,52 @@
   .btn.btn-sort { margin-top: 12px; /* or padding-top */ }
   
   /* Ensure download area doesn't overlap the fixed nav */
+/* Keep space so it doesn't collide with the fixed nav */
 .download-row {
   text-align: center;
-  margin: 20px 0 96px; /* bottom space gives breathing room above nav */
+  margin: 24px 0 96px;
+}
+
+/* Ensure any global .btn width:100% is overridden for this one */
+.download-row, .btn {
+  width: auto;
+}
+
+/* Custom look for the Download button */
+.btn-download {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 1.1rem;
+  min-width: 180px;         /* keeps it compact but not tiny */
+  font-weight: 600;
+  border-radius: 9999px;     /* pill shape */
+  border: 1px solid #1e40af;
+  background: #2563eb;       /* blue */
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  cursor: pointer;
+  transition: background-color .15s ease, border-color .15s ease,
+              box-shadow .2s ease, transform .04s ease;
+}
+
+/* Hover / active / focus states */
+.btn-download:hover {
+  background: #1d4ed8;
+  border-color: #1e40af;
+}
+
+.btn-download:active {
+  transform: translateY(1px);
+}
+
+.btn-download:focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.35);
+  outline-offset: 2px;
+}
+
+/* Disabled look if you ever disable it */
+#downloadCsvBtn[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
