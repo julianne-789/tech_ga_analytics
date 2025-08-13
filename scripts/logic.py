@@ -106,7 +106,7 @@ for i, x in enumerate(countries):         # Country X (rows)
         row.append(text)
     hover_text.append(row)
 
-    # Make heatmap
+"""     # Make heatmap
 
 # Transpose hover text matrix
 hover_text = np.array(hover_text).T.tolist()
@@ -129,3 +129,71 @@ fig.update_layout(
     width=5000,
     height=5000
 )
+ """
+
+# --- Make heatmap with white diagonal ---
+
+# Base matrix (transpose matches your axes); hide diagonal in base layer
+z_main = percent_matrix.T.copy()
+np.fill_diagonal(z_main, np.nan)
+
+# Diagonal overlay: a matrix that has values only on the diagonal
+z_diag = np.full_like(z_main, np.nan, dtype=float)
+np.fill_diagonal(z_diag, 0)  # any constant works since we force white
+
+# Keep hover on diagonal cells
+diag_text = [['' for _ in countries] for _ in countries]
+for i in range(len(countries)):
+    diag_text[i][i] = hover_text[i][i]
+
+fig = go.Figure()
+
+# Base heatmap (everything except diagonal)
+fig.add_trace(go.Heatmap(
+    z=z_main,
+    x=countries,
+    y=countries,
+    colorscale=[[0.0, 'blue'], [1.0, 'red']],
+    colorbar=dict(title='% Match'),
+    text=hover_text,
+    hoverinfo='text'
+))
+
+# Diagonal overlay (white tiles)
+fig.add_trace(go.Heatmap(
+    z=z_diag,
+    x=countries,
+    y=countries,
+    colorscale=[[0, 'white'], [1, 'white']],
+    showscale=False,
+    text=diag_text,
+    hoverinfo='text'
+))
+
+fig.update_layout(
+    title='Voting Alignment Heatmap',
+    xaxis_title="Country X",
+    yaxis_title="Country Y",
+    width=5000,
+    height=5000
+)
+
+fig.show()
+# Project root (one level up from /scripts)
+root = Path(__file__).resolve().parents[1]
+out_dir = root / "plots"
+out_dir.mkdir(parents=True, exist_ok=True)
+
+out_file = out_dir / "heatmap.html"
+
+# Save a self-contained HTML (loads Plotly from CDN)
+pio.write_html(
+    fig,
+    file=str(out_file),
+    full_html=True,
+    include_plotlyjs="cdn",
+    default_width="100%",
+    default_height="100%"
+)
+
+print(f"Wrote heatmap to {out_file}")
