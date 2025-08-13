@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>1. Choose Resolutions</title>
+  <!-- Global styles then page-specific styles -->
+  <link rel="stylesheet" href="../assets/styles.css" />
+</head>
+<body>
+  <main class="page-container">
+    <h1>1. Choose Resolutions</h1>
+    <p>
+      Add and remove resolutions to your list using search or by category. 
+    </p>
+
+    <section class="card">
+      <h2>Your Selected Resolutions</h2>
+
+      <!-- Search input (type to find resolutions) -->
+      <div class="field" style="position: relative; max-width: 800px;">
+        <input
+          id="selectedSearch"
+          type="text"
+          placeholder="Type to search… e.g., 78/, cyber, outer space"
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="none"
+          spellcheck="false"
+          inputmode="search"
+          data-gramm="false"
+          data-lt-active="false"
+        />
+        <!-- Dropdown with resolution matches -->
+        <div id="searchResults" class="dropdown"></div>
+      </div>
+
+      <!-- Current selections (chips with tiny × to remove) -->
+      <div id="chips" class="chips" style="margin-top:.5rem;"></div>
+
+      <!-- Bulk action buttons -->
+      <div class="row wrap" style="gap:10px; margin-top:12px;">
+        <button id="selectAll" class="btn" type="button">Select All</button>
+        <button id="clearAll" class="btn" type="button">Clear All</button>
+      </div>
+
+      <!-- Add by category (placed BELOW the bulk buttons) -->
+      <div style="margin-top:14px;">
+        <div class="muted" style="margin-bottom:6px;">Add by category</div>
+        <div class="field" style="position: relative; max-width: 600px;">
+          <input
+            id="categoryInput"
+            type="text"
+            placeholder="Type or scroll to choose a category…"
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="none"
+            spellcheck="false"
+            inputmode="search"
+            data-gramm="false"
+            data-lt-active="false"
+          />
+          <!-- Dropdown with category options -->
+          <div id="categoryResults" class="dropdown"></div>
+          <!-- Chosen categories/agendas appear here as removable chips -->
+          <div id="catAgLabel" class="muted" style="margin:10px 0 6px; display:none;">Chosen categories / agendas</div>
+          <div id="catAgChips" class="chips"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <!-- Floating nav (always visible) -->
+  <div class="nav-fixed" aria-label="Page navigation">
+    <a class="btn-nav" href="index.html">← Prev</a>
+    <a class="btn-nav" href="2_ms.html">Next →</a>
+  </div>
+</body>
+</html>
