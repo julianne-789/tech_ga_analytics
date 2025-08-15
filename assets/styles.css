@@ -2,137 +2,137 @@
  * TOKENS
  ***************/
  :root {
-    --primary: #5B92E5;
-    --primary-dark: #487ac0;
-    --bg: #f0f4fb;
-    --card-bg: #fff;
-    --text: #333;
-    --muted: #666;
-    --radius: 12px;
-    --shadow: 0 4px 12px rgba(0,0,0,0.08);
-    --shadow-inset: inset 0 1px 2px rgba(0,0,0,0.04);
-    --container-max: 1000px;
+  --primary: #5B92E5;
+  --primary-dark: #487ac0;
+  --bg: #f0f4fb;
+  --card-bg: #fff;
+  --text: #333;
+  --muted: #666;
+  --radius: 12px;
+  --shadow: 0 4px 12px rgba(0,0,0,0.08);
+  --shadow-inset: inset 0 1px 2px rgba(0,0,0,0.04);
+  --container-max: 1000px;
+}
+
+/***************
+ * BASE / RESET
+ ***************/
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  color: var(--text);
+  background: var(--bg);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+/***************
+ * TYPOGRAPHY
+ ***************/
+h1, h2 { color: var(--primary); margin-top: 0; }
+h1 { font-size: 2.2rem; margin-bottom: 1rem; }
+.muted { color: var(--muted); }
+
+/***************
+ * LAYOUT
+ ***************/
+.page-container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 2rem 1.25rem;
+  padding-bottom: 96px;
+}
+
+/***************
+ * COMPONENTS
+ ***************/
+.card {
+  background: var(--card-bg);
+  border: 2px solid var(--primary);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  box-shadow: var(--shadow);
+  margin-top: 1rem;
+}
+
+/* shared textarea style (res page extends it) */
+.selected-input {
+  width: 100%;
+  min-height: 3.5rem;
+  padding: .75rem .9rem;
+  border: 2px solid var(--primary);
+  border-radius: 8px;
+  background: #eef4fd;
+  color: var(--text);
+  resize: vertical;
+  box-shadow: var(--shadow-inset);
+}
+.selected-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(91,146,229,0.25);
+}
+
+/* =========================================
+   Floating Nav (always visible on screen)
+   ========================================= */
+   .nav-fixed {
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 16px); /* plays nice with iOS notch */
+    display: flex;
+    gap: 12px;
+    z-index: 1000; /* above cards/dropdowns */
   }
   
-  /***************
-   * BASE / RESET
-   ***************/
-  * { box-sizing: border-box; }
-  html, body { height: 100%; }
-  body {
-    margin: 0;
-    color: var(--text);
-    background: var(--bg);
-    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  .nav-fixed .btn-nav {
+    display: inline-block;
+    padding: 0.65rem 1.2rem;
+    border-radius: 999px;          /* pill shape */
+    background: #5B92E5;
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+    box-shadow: 0 6px 16px rgba(0,0,0,.12);
+    transition: transform .15s ease, background-color .2s ease;
   }
   
-  /***************
-   * TYPOGRAPHY
-   ***************/
-  h1, h2 { color: var(--primary); margin-top: 0; }
-  h1 { font-size: 2.2rem; margin-bottom: 1rem; }
-  .muted { color: var(--muted); }
+  .nav-fixed .btn-nav:hover { background: #487ac0; }
+  .nav-fixed .btn-nav:active { transform: translateY(1px); }
   
-  /***************
-   * LAYOUT
-   ***************/
-  .page-container {
-    max-width: var(--container-max);
-    margin: 0 auto;
-    padding: 2rem 1.25rem;
-    padding-bottom: 96px;
-  }
-  
-  /***************
-   * COMPONENTS
-   ***************/
-  .card {
-    background: var(--card-bg);
-    border: 2px solid var(--primary);
-    border-radius: var(--radius);
-    padding: 1rem 1.25rem;
-    box-shadow: var(--shadow);
-    margin-top: 1rem;
-  }
-  
-  /* shared textarea style (res page extends it) */
-  .selected-input {
-    width: 100%;
-    min-height: 3.5rem;
-    padding: .75rem .9rem;
-    border: 2px solid var(--primary);
-    border-radius: 8px;
-    background: #eef4fd;
-    color: var(--text);
-    resize: vertical;
-    box-shadow: var(--shadow-inset);
-  }
-  .selected-input:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(91,146,229,0.25);
-  }
-  
-  /* =========================================
-     Floating Nav (always visible on screen)
-     ========================================= */
-     .nav-fixed {
-      position: fixed;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: calc(env(safe-area-inset-bottom, 0px) + 16px); /* plays nice with iOS notch */
-      display: flex;
-      gap: 12px;
-      z-index: 1000; /* above cards/dropdowns */
-    }
-    
-    .nav-fixed .btn-nav {
-      display: inline-block;
-      padding: 0.65rem 1.2rem;
-      border-radius: 999px;          /* pill shape */
-      background: #5B92E5;
-      color: #fff;
-      text-decoration: none;
-      font-size: 1rem;
-      box-shadow: 0 6px 16px rgba(0,0,0,.12);
-      transition: transform .15s ease, background-color .2s ease;
-    }
-    
-    .nav-fixed .btn-nav:hover { background: #487ac0; }
-    .nav-fixed .btn-nav:active { transform: translateY(1px); }
-    
-    /* ===== Unified Buttons for all pages ===== */
-  
-  .btn,
-  .btn-ghost {
-    --btn-bg: #fff;
-    --btn-color: var(--primary);
-    --btn-border: var(--primary);
-  
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: .4rem;
-  
-    padding: .6rem 1rem;
-    border-radius: 10px;
-    border: 2px solid var(--btn-border);
-    background: var(--btn-bg);
-    color: var(--btn-color);
-  
-    font-weight: 600;
-    line-height: 1;
-    cursor: pointer;
-    text-decoration: none;            /* covers <a> */
-    box-shadow: 0 1px 0 rgba(0,0,0,.03);
-    transition: background .2s ease, color .2s ease, border-color .2s ease,
-                box-shadow .2s ease, transform .03s ease;
-  }
-  
-  .btn:hover        { background: #f6fafe; }
-  .btn:active       { transform: translateY(1px); }
-  
-  .btn:focus-visible,
-  .btn-ghost:focus-visible {
-    outline: 3px solid rgba(91,146,229,.35);
-    outline-offset: 2px;
-  }
+  /* ===== Unified Buttons for all pages ===== */
+
+.btn,
+.btn-ghost {
+  --btn-bg: #fff;
+  --btn-color: var(--primary);
+  --btn-border: var(--primary);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .4rem;
+
+  padding: .6rem 1rem;
+  border-radius: 10px;
+  border: 2px solid var(--btn-border);
+  background: var(--btn-bg);
+  color: var(--btn-color);
+
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  text-decoration: none;            /* covers <a> */
+  box-shadow: 0 1px 0 rgba(0,0,0,.03);
+  transition: background .2s ease, color .2s ease, border-color .2s ease,
+              box-shadow .2s ease, transform .03s ease;
+}
+
+.btn:hover        { background: #f6fafe; }
+.btn:active       { transform: translateY(1px); }
+
+.btn:focus-visible,
+.btn-ghost:focus-visible {
+  outline: 3px solid rgba(91,146,229,.35);
+  outline-offset: 2px;
+}

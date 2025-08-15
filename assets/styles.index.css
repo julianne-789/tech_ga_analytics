@@ -1,38 +1,37 @@
 /* Center the home content vertically on the page */
 body {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  /* Home container “card” */
-  .home-container {
-    max-width: 800px;
-    padding: 2rem;
-    text-align: center;
-    background: var(--card-bg);
-    border-radius: var(--radius);
-    border: 3px solid var(--primary);
-    box-shadow: var(--shadow);
-  }
-  
-  /* Steps block */
-  .steps {
-    text-align: left;
-    display: inline-block;
-    margin: 1rem auto;
-    border-left: 4px solid var(--primary);
-    padding-left: 1rem;
-    background: #eef4fd;
-    border-radius: 6px;
-  }
-  .steps h2 { text-align: center; }
-  .steps ol { font-size: 1rem; line-height: 1.5; }
-  
-  /* Optional descriptive paragraph */
-  .description {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    margin-bottom: 1.5rem;
-  }
-  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Home container “card” */
+.home-container {
+  max-width: 800px;
+  padding: 2rem;
+  text-align: center;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  border: 3px solid var(--primary);
+  box-shadow: var(--shadow);
+}
+
+/* Steps block */
+.steps {
+  text-align: left;
+  display: inline-block;
+  margin: 1rem auto;
+  border-left: 4px solid var(--primary);
+  padding-left: 1rem;
+  background: #eef4fd;
+  border-radius: 6px;
+}
+.steps h2 { text-align: center; }
+.steps ol { font-size: 1rem; line-height: 1.5; }
+
+/* Optional descriptive paragraph */
+.description {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}

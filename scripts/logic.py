@@ -5,170 +5,176 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import plotly.express as px
 import plotly.graph_objects as go
-from pathlib import Path
 import plotly.io as pio
+import sys
+import webbrowser
+from pathlib import Path
 
-# Make pivot table
-pivot = df.pivot_table(
-    index = 'resolution',
-    columns = 'ms_name',
-    values = 'ms_vote',
-    aggfunc = 'first'
-)
+def generate_heatmap(csv_path):
+    # Read the uploaded CSV
+    df = pd.read_csv(csv_path)
 
-# Gather countries
-countries = pivot.columns
-
-# Make lists for data storage
-x_yn_counts = [] # how many times country x voted Y or N
-y_match_counts = [] # how many times country y also voted on a same RES as country x
-yn_resolutions = [] # list of resolutions country x voted Y or N
-xy_matches = [] # how many times country y and country x voted the same way
-shared_percentages = [] # percent of country x's votes that country y matched
-
-countries = pivot.columns
-
-# Initialize outer lists
-x_yn_counts = []           # Total X votes (Y or N)
-y_match_counts = []        # How many times Y voted on X's resolutions
-xy_matches = []            # How many times Y matched X
-shared_percentages = []    # % match from Y on X's Y/N votes
-
-for x in countries:
-    x_votes = pivot[x]
-    mask_x = x_votes.isin(['Y', 'N'])  # Country X's Y/N votes
-    resolutions = pivot.index[mask_x]  # Resolutions X voted on
-    x_yn_count = len(resolutions)      # Total X Y/N votes
-
-    x_y_matches = []
-    y_counts = []
-    percents = []
-
-    for y in countries:
-        y_votes = pivot.loc[resolutions, y]
-        valid_mask = y_votes.isin(['Y', 'N'])  # Y must have voted Y/N
-
-        x_valid = x_votes[resolutions][valid_mask]
-        y_valid = y_votes[valid_mask]
-
-        match_count = (x_valid == y_valid).sum()
-        y_count = valid_mask.sum()
-
-        shared_percent = (match_count * 100) / x_yn_count if x_yn_count > 0 else 0
-
-        # Store row values
-        x_y_matches.append(match_count)
-        y_counts.append(y_count)
-        percents.append(shared_percent)
+    # Make pivot table
+    pivot = df.pivot_table(
+        index = 'resolution',
+        columns = 'ms_name',
+        values = 'ms_vote',
+        aggfunc = 'first'
+    )
 
 
-    # Store row after Y-loop
-    x_yn_counts.append(x_yn_count)
-    xy_matches.append(x_y_matches)
-    y_match_counts.append(y_counts)
-    shared_percentages.append(percents)
+    # Gather countries
+    countries = pivot.columns
 
-    # Make dataframe
+    # Make lists for data storage
+    x_yn_counts = [] # how many times country x voted Y or N
+    y_match_counts = [] # how many times country y also voted on a same RES as country x
+    yn_resolutions = [] # list of resolutions country x voted Y or N
+    xy_matches = [] # how many times country y and country x voted the same way
+    shared_percentages = [] # percent of country x's votes that country y matched
 
-n = len(countries)
+    countries = pivot.columns
 
-# Reshape flat lists into square matrices
-percent_matrix = np.array(shared_percentages).reshape(n, n)
-x_votes_matrix = np.array(x_yn_counts).reshape(n, 1).repeat(n, axis=1)
-y_match_matrix = np.array(y_match_counts).reshape(n, n)
-match_matrix = np.array(xy_matches)
+    # Initialize outer lists
+    x_yn_counts = []           # Total X votes (Y or N)
+    y_match_counts = []        # How many times Y voted on X's resolutions
+    xy_matches = []            # How many times Y matched X
+    shared_percentages = []    # % match from Y on X's Y/N votes
+
+    for x in countries:
+        x_votes = pivot[x]
+        mask_x = x_votes.isin(['Y', 'N'])  # Country X's Y/N votes
+        resolutions = pivot.index[mask_x]  # Resolutions X voted on
+        x_yn_count = len(resolutions)      # Total X Y/N votes
+
+        x_y_matches = []
+        y_counts = []
+        percents = []
+
+        for y in countries:
+            y_votes = pivot.loc[resolutions, y]
+            valid_mask = y_votes.isin(['Y', 'N'])  # Y must have voted Y/N
+
+            x_valid = x_votes[resolutions][valid_mask]
+            y_valid = y_votes[valid_mask]
+
+            match_count = (x_valid == y_valid).sum()
+            y_count = valid_mask.sum()
+
+            shared_percent = (match_count * 100) / x_yn_count if x_yn_count > 0 else 0
+
+            # Store row values
+            x_y_matches.append(match_count)
+            y_counts.append(y_count)
+            percents.append(shared_percent)
 
 
-# Wrap in DataFrames
-df_percent = pd.DataFrame(percent_matrix, index=countries, columns=countries)
-df_x_votes = pd.DataFrame(x_votes_matrix, index=countries, columns=countries)
-df_y_match = pd.DataFrame(y_match_matrix, index=countries, columns=countries)
+        # Store row after Y-loop
+        x_yn_counts.append(x_yn_count)
+        xy_matches.append(x_y_matches)
+        y_match_counts.append(y_counts)
+        shared_percentages.append(percents)
 
-# Build hover text
+    # Make dataframes
 
-hover_text = []
+    n = len(countries)
 
-for i, x in enumerate(countries):         # Country X (rows)
-    row = []
-    for j, y in enumerate(countries):     # Country Y (columns)
-        matched = match_matrix[i, j]
-        total_x = x_votes_matrix[i, j]
-        percent = percent_matrix[i, j]
+    # Reshape flat lists into square matrices
+    percent_matrix = np.array(shared_percentages).reshape(n, n)
+    x_votes_matrix = np.array(x_yn_counts).reshape(n, 1).repeat(n, axis=1)
+    y_match_matrix = np.array(y_match_counts).reshape(n, n)
+    match_matrix = np.array(xy_matches)
 
-        text = (
-            f"<b>Country X:</b> {x}<br>"
-            f"<b>Country Y:</b> {y}<br>"
-            f"<b>% Matched:</b> {percent_matrix[i, j]:.1f}<br>"
-            f"<b>Matched Votes:</b> {matched}<br>"
-            f"<b>{x} Total Votes:</b> {x_votes_matrix[i, j]}<br>"
-            f"<b>{y} Voted Same Resolutions:</b> {y_match_matrix[i, j]}"
-        )
-        row.append(text)
-    hover_text.append(row)
 
-# --- Make heatmap with white diagonal ---
+    # Wrap in DataFrames
+    df_percent = pd.DataFrame(percent_matrix, index=countries, columns=countries)
+    df_x_votes = pd.DataFrame(x_votes_matrix, index=countries, columns=countries)
+    df_y_match = pd.DataFrame(y_match_matrix, index=countries, columns=countries)
 
-# Base matrix (transpose matches your axes); hide diagonal in base layer
-z_main = percent_matrix.T.copy()
-np.fill_diagonal(z_main, np.nan)
+    # Build hover text
 
-# Diagonal overlay: a matrix that has values only on the diagonal
-z_diag = np.full_like(z_main, np.nan, dtype=float)
-np.fill_diagonal(z_diag, 0)  # any constant works since we force white
+    hover_text = []
 
-# Keep hover on diagonal cells
-diag_text = [['' for _ in countries] for _ in countries]
-for i in range(len(countries)):
-    diag_text[i][i] = hover_text[i][i]
+    for i, x in enumerate(countries):         # Country X (rows)
+        row = []
+        for j, y in enumerate(countries):     # Country Y (columns)
+            matched = match_matrix[i, j]
+            total_x = x_votes_matrix[i, j]
+            percent = percent_matrix[i, j]
 
-fig = go.Figure()
+            text = (
+                f"<b>Country X:</b> {x}<br>"
+                f"<b>Country Y:</b> {y}<br>"
+                f"<b>% Matched:</b> {percent_matrix[i, j]:.1f}<br>"
+                f"<b>Matched Votes:</b> {matched}<br>"
+                f"<b>{x} Total Votes:</b> {x_votes_matrix[i, j]}<br>"
+                f"<b>{y} Voted Same Resolutions:</b> {y_match_matrix[i, j]}"
+            )
+            row.append(text)
+        hover_text.append(row)
 
-# Base heatmap (everything except diagonal)
-fig.add_trace(go.Heatmap(
-    z=z_main,
-    x=countries,
-    y=countries,
-    colorscale=[[0.0, 'blue'], [1.0, 'red']],
-    colorbar=dict(title='% Match'),
-    text=hover_text,
-    hoverinfo='text'
-))
 
-# Diagonal overlay (white tiles)
-fig.add_trace(go.Heatmap(
-    z=z_diag,
-    x=countries,
-    y=countries,
-    colorscale=[[0, 'white'], [1, 'white']],
-    showscale=False,
-    text=diag_text,
-    hoverinfo='text'
-))
+    # z is [y][x]
+    z = percent_matrix.T.astype(float).copy()
+    np.fill_diagonal(z, np.nan)
 
-fig.update_layout(
-    title='Voting Alignment Heatmap',
-    xaxis_title="Country X",
-    yaxis_title="Country Y",
-    width=5000,
-    height=5000
-)
+    n = len(countries)
 
-fig.show()
-# Project root (one level up from /scripts)
-root = Path(__file__).resolve().parents[1]
-out_dir = root / "plots"
-out_dir.mkdir(parents=True, exist_ok=True)
+    # Build hover text in [y][x] orientation
+    hover_text_aligned = []
+    for j in range(n):          # y index (rows)
+        row = []
+        for i in range(n):      # x index (cols)
+            x = countries[i]
+            y = countries[j]
+            matched = match_matrix[i, j]          # match_matrix is [x][y]
+            total_x = x_votes_matrix[i, j]        # [x][y]
+            percent = percent_matrix[i, j]        # [x][y]
 
-out_file = out_dir / "heatmap.html"
+            row.append(
+                f"<b>Country X:</b> {x}<br>"
+                f"<b>Country Y:</b> {y}<br>"
+                f"<b>% Matched:</b> {percent:.1f}<br>"
+                f"<b>Matched Votes:</b> {matched}<br>"
+                f"<b>{x} Total Votes:</b> {total_x}<br>"
+                f"<b>{y} Voted Same Resolutions:</b> {y_match_matrix[i, j]}"
+            )
+        hover_text_aligned.append(row)
 
-# Save a self-contained HTML (loads Plotly from CDN)
-pio.write_html(
-    fig,
-    file=str(out_file),
-    full_html=True,
-    include_plotlyjs="cdn",
-    default_width="100%",
-    default_height="100%"
-)
+    # Clear diagonal hover and plot
+    for k in range(n):
+        hover_text_aligned[k][k] = ""
 
-print(f"Wrote heatmap to {out_file}")
+    fig = go.Figure(go.Heatmap(
+        z=z,
+        x=countries,           # columns => X
+        y=countries,           # rows => Y
+        colorscale=[[0.0, 'blue'], [1.0, 'red']],
+        colorbar=dict(title='% Match'),
+        text=hover_text_aligned,
+        hoverinfo='text',
+        hoverongaps=False
+    ))
+
+    fig.update_layout(
+        paper_bgcolor='white', plot_bgcolor='white',
+        title='Voting Alignment Heatmap',
+        xaxis_title='Country X', yaxis_title='Country Y',
+        width=5000, height=5000
+    )
+
+    # Save and automatically open in browser
+    output_file = Path(__file__).parent.parent / "pages" / "heatmap_result.html"
+    fig.write_html(output_file, include_plotlyjs='cdn')
+        
+    # Open in browser automatically
+    webbrowser.open(f"file://{output_file.absolute()}", new=2)
+    print(f"Heatmap opened in browser: {output_file}")
+
+    return fig
+
+if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        generate_heatmap(sys.argv[1])
+    else:
+        print("Usage: python logic.py <path_to_csv_file>")
