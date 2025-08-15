@@ -1,26 +1,4 @@
-/* ========== Upload section ========== */
-
-.dropzone {
-  display: block;
-  border: 2px dashed #cbd5e1;
-  border-radius: 12px;
-  padding: 28px;
-  text-align: center;
-  background: #f8fafc;
-  color: #475569;
-  cursor: pointer;
-  transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
-  margin-bottom: 12px;
-}
-
-.dropzone:hover,
-.dropzone:focus {
-  border-color: #94a3b8;
-  background: #f1f5f9;
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.25);
-}
-
+/* ===== File upload ===== */
 #csvFile {
   width: 100%;
   border: 1px solid #e2e8f0;
@@ -29,14 +7,12 @@
   background: #ffffff;
 }
 
-/* ========== Actions row and Generate button ========== */
-
+/* ===== Actions row and Generate button ===== */
 .actions {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-top: 18px;
-  margin-bottom: 12px;
+  margin: 24px 0;           /* even vertical spacing */
 }
 
 #generateBtn.btn {
@@ -48,8 +24,6 @@
   padding: 12px 18px;
   box-shadow: 0 6px 16px rgba(2, 132, 199, 0.25);
   transition: transform 0.08s ease, box-shadow 0.15s ease, filter 0.15s ease;
-  margin-top: 8px;     /* keeps space above */
-  margin-bottom: 8px;  /* keeps space below */
 }
 
 #generateBtn.btn:hover {
@@ -75,56 +49,52 @@
   cursor: not-allowed;
 }
 
-/* ========== Heatmap container ========== */
-
-.viz {
-  width: 100%;
-  height: 70vh;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  background: #ffffff;
+/* ===== Layout and heatmap ===== */
+.page-container {
+  max-width: 95%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;                /* even space between all children */
+  padding-bottom: 72px;     /* keeps content clear of fixed nav */
 }
 
-/* Make heatmap container full width and larger */
+/* Fallback spacing for older browsers */
+.page-container > * + * { margin-top: 24px; }
+
 #heatmapSection {
   width: 100%;
-  max-width: none; /* Override any max-width restrictions */
+  max-width: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+  text-align: center;
 }
 
 #heatmap {
   width: 100% !important;
-  min-height: 800px; /* Increase from 600px */
-  height: 80vh; /* Use viewport height for responsiveness */
+  min-height: 800px;
+  height: 80vh;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/* Make the main container wider for heatmap */
-.page-container {
-  max-width: 95%; /* Increase from default */
+/* Hide heatmap section by default */
+#heatmapSection[hidden] {
+  display: none !important;
 }
 
-/* Optional: Full screen heatmap on large screens */
+/* ===== Responsive ===== */
 @media (min-width: 1200px) {
-  #heatmapSection {
-    margin: 0 -2rem; /* Extend beyond container margins */
-  }
-  
-  #heatmap {
-    min-height: 1000px;
-  }
+  #heatmap { min-height: 1000px; }
 }
 
-/* Mobile responsive */
 @media (max-width: 768px) {
   #heatmap {
     min-height: 600px;
     height: 70vh;
-  }
-}
-
-/* ========== Small screens ========== */
-
-@media (max-width: 640px) {
-  .viz {
-    height: 55vh;
   }
 }
